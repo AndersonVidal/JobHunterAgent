@@ -1,4 +1,4 @@
-package com.example;
+package com.andersonvidal.jobhunteragent;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,4 +16,5 @@ public class AppTest {
     public void shouldAnswerWithTrue() {
         assertTrue(true);
     }
+
 }

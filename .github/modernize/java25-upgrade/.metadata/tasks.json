@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Tasks for upgrading the JobHunterAgent Maven build to Java 25 LTS.",
+  "tasks": [
+    {
+      "type": "upgrade",
+      "id": "001-upgrade-java-25",
+      "description": "Upgrade the Maven build target and execution environment to Java 25 LTS.",
+      "reason": "The project currently configures Java release 17 and the requested target is Java 25 LTS.",
+      "requirements": "Set java.version and maven.compiler.release to 25 in the existing pom.xml and run Maven using JDK 25. Keep the task limited to Java-version settings; do not change the Spring Boot parent, unrelated dependencies, or existing user source/test files. Preserve the pre-existing working-tree edits and target/job-hunter-agent-1.0-SNAPSHOT.jar. Record the current test baseline first; report existing test compilation failures without repairing out-of-scope user files. Validate production compilation/package with tests skipped, then run mvn test and compare with baseline. Do not claim Java 25 runtime compatibility while Spring Boot 3.5.0 remains without resolving the framework compatibility question in plan.md.",
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "security",
+      "id": "002-dependency-cve-review",
+      "description": "Scan Maven dependencies for known CVEs and remediate confirmed vulnerable dependencies.",
+      "reason": "Dependency security review is a standard modernization-plan gate.",
+      "requirements": "After the Java 25 build task, scan the Maven dependency set for known CVEs. Upgrade affected dependencies to minimum patched versions, document breaking-change risks for any major upgrade, and verify build and tests after remediation. Keep any unrelated dependency changes separately identifiable.",
+      "dependencies": [
+        "001-upgrade-java-25"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    }
+  ],
+  "metadata": {
+    "planName": "java25-upgrade",
+    "projectName": "JobHunterAgent",
+    "language": "java",
+    "createdAt": "2026-11-20T08:22:19-03:00",
+    "version": "1.0"
+  }
+}
